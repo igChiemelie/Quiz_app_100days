@@ -1,0 +1,14 @@
+body {
+    min-height: calc(100vh - 10px);
+    background: url("../img/course03.jpg") center/cover no-repeat;
+    display: flex;
+    align-items: top;
+    justify-content: center;
+
+}
+
+button {
+    padding: .2rem .7rem;
+    border-radius: 8px;
+    /* border: 2px thin red; */
+}

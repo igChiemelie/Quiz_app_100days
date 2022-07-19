@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIZ-APP</title>
+    <link rel="stylesheet" href="css/my_styles.css">
+</head>
+<style>
+    .row {
+        margin-bottom: 5vh;
+    }
+
+    #questions {
+        background-color: black;
+        color: hotpink;
+        padding: 20px;
+    }
+</style>
+
+
+<body>
+
+    <div>
+
+        <div>
+            <span id="min">0</span>:<span id="sec">20</span>
+        </div>
+
+        <div>
+            <p>
+                Read the question attentively and choose the correct answer.
+            </p>
+
+        </div>
+
+        <!-- <div id="que">
+            <p>Obi is a ...?</p>
+            <hr>
+            <form id="question1">
+                <div>
+                    <input type="radio" name="ques1" value="A"> A. BOY
+                </div>
+                <div>
+                    <input type="radio" name="ques1" value="B"> B. ANIMAL
+                </div>
+                <div class="wrong">
+                    <input type="radio" name="ques1" value="C"> C. GIRL
+                </div>
+                <div class="wrong">
+                    <input type="radio" name="ques1" value="D"> C. CHILD
+                </div>
+            </form>
+
+        </div> -->
+        <div id="questions" class="row"></div>
+
+
+        <div id="control">
+            <button id="prev">&lt;&lt;Prev</button>
+            <button id="submit">Submit</button>
+            <button id="next">Next&gt;&gt;</button>
+        </div>
+    </div>
+
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script>
+        var questionBank = [{
+                'id': 1,
+                'ques': 'What is Obi\'s gender?',
+                'optA': 'Male',
+                'optB': 'Female',
+                'optC': 'Reptile',
+                'optD': 'Mammal',
+                'ans': 'A',
+                'userAns': ''
+            },
+            {
+                'id': 2,
+                'ques': 'What is Ada\'s gender?',
+                'optA': 'Male',
+                'optB': 'Female',
+                'optC': 'Reptile',
+                'optD': 'Mammal',
+                'ans': 'B',
+                'userAns': ''
+            },
+            {
+                'id': 3,
+                'ques': 'What is Mbe\'s gender?',
+                'optA': 'Male',
+                'optB': 'Female',
+                'optC': 'Reptile',
+                'optD': 'Mammal',
+                'ans': 'C',
+                'userAns': ''
+            },
+            {
+                'id': 4,
+                'ques': 'What is Ewu\'s gender?',
+                'optA': 'Male',
+                'optB': 'Female',
+                'optC': 'Reptile',
+                'optD': 'Mammal',
+                'ans': 'D',
+                'userAns': ''
+            },
+        ];
+        $('#prev').prop("disabled", true); //disable prev button
+        var quesLen = questionBank.length;
+        console.log(quesLen);
+        var a;
+
+        for (a = 0; a < quesLen; a++) {
+            if (a == 0) {
+                $('#questions').append('<div id="q' + questionBank[a].id + '" class="q active"><p><b>Question ' +
+                    questionBank[a].id + '</b></p><p>' + questionBank[a].ques +
+                    '</p><div><input type="radio" value="A" name="Question ' + questionBank[a].id + '"> A. ' +
+                    questionBank[a].optA + '</div><div><input type="radio" value="B" name="Question ' +
+                    questionBank[a].id + '"> B. ' + questionBank[a].optB +
+                    '</div><div><input type="radio" value="C" name="Question ' + questionBank[a].id + '"> C. ' +
+                    questionBank[a].optC + '</div><div><input type="radio" value="D" name="Question ' +
+                    questionBank[a].id + '"> D. ' + questionBank[a].optD + '</div></div>')
+            } else {
+                $('#questions').append('<div id="q' + questionBank[a].id + '" class="q"><p><b>Question ' + questionBank[
+                        a].id + '</b></p><p>' + questionBank[a].ques +
+                    '</p><div><input type="radio" value="A" name="Question ' + questionBank[a].id + '"> A. ' +
+                    questionBank[a].optA + '</div><div><input type="radio" value="B" name="Question ' +
+                    questionBank[a].id + '"> B. ' + questionBank[a].optB +
+                    '</div><div><input type="radio" value="C" name="Question ' + questionBank[a].id + '"> C. ' +
+                    questionBank[a].optC + '</div><div><input type="radio" value="D" name="Question ' +
+                    questionBank[a].id + '"> D. ' + questionBank[a].optD + '</div></div>')
+            }
+
+        }
+
+        showQues();
+
+        function showQues() {
+            $('.q').hide(); //hide all divs with class q.......hide all question divs
+            $('.active').slideDown(); //show div with class active......show 1 question div
+        }
+
+         $('#next').click(function () { //if u click the next button...#next            
+
+            var curQuesId = $('.active').attr('id'); //get id of element that s current bearing the class active
+            console.log(curQuesId);
+            var nextQuesId = $('.active').next().attr('id'); //get the id of the element next to the element that s current bearing the class active
+
+            var questionNum = curQuesId.substr(1, 1); //get question number by getting the last character of the curQuesId....using substr
+            console.log(questionNum);
+            if (questionNum < quesLen) { //only run the the question number is not more than quantity of question asked
+                $('#' + curQuesId).removeClass('active'); //remove acive class from the currently displaying question
+                $('#' + nextQuesId).addClass( 'active'); //add active class to the element next to the currently display question
+
+                if (questionNum == (quesLen - 1)) { //if the currently displaying question is the last one
+                    $('#next').prop("disabled", true); //disable next button
+                } else {
+                    $('#next').prop("disabled", false); //enable next button
+                }
+                showQues(); //run the showQues function
+            }
+
+            $('#prev').prop("disabled", false); //enable prev button
+        });
+
+
+        $('#prev').click(function () { //if u click the next button...#prev
+            var curQuesId = $('.active').attr('id'); //get id of element that s current bearing the class active
+            // console.log(curQuesId);
+            var prevQuesId = $('.active').prev().attr('id'); //get the id of the element before the element that s current bearing the class active
+            // console.log(prevQuesId);
+            var questionNum = prevQuesId.substr(1, 1); //get question number of prevQuesId....using substr
+            // console.log(questionNum);
+            if (questionNum > 0) { //only run the the question number is more than question 1 and above
+                $('#' + curQuesId).removeClass('active'); //remove acive class from the currently displaying question
+                $('#' + prevQuesId).addClass('active'); //add active class to the element prev to the currently display question
+
+                if (questionNum == 1) { //if the currently displaying question is the first one NOTE: CAN ALSO USE parseInt(questionNum)
+                    $('#prev').prop('disabled', true) //disable prev button
+                } else {
+                    $('#prev').prop('disabled', false) //enable prev button
+                }
+                showQues(); //run the showQues function
+            }
+            $('#next').prop('disabled', false); //enable next button
+        });
+
+
+        //Timer count down
+        var timeCountDown = setInterval(function(){
+            var min =  $('#min').text();
+            var sec =  $('#sec').text();
+
+            //if min == 0 && sec == 00
+            if(min == 0 && sec == 00){
+                
+                //TODO: reset timer, stop the test. display score
+                var totalScore = submitQuestion(quesLen);
+                $('#questions').html('You Scored: '+totalScore+'%');
+                $('#submit').prop('disabled', true);//disabled prev button
+                alert('You Scored: '+totalScore+'%');
+                $('#control').append('<button id="restart">Restart</button>');
+                $('#restart').click(function (e) {
+                    e.preventDefault();
+                    // console.log('here');
+                    location.reload();
+
+                });
+                // stop timer
+                clearInterval(timeCountDown);
+            }  else if(sec == 00){//else if sec == 00
+                //subtract 1 from min
+                min = min - 1;
+                //set min to new value
+                $('#min').text(min);
+                //set sec to 59
+                sec = 59;
+                $('#sec').text(sec);
+            } else if(sec <= 10){//else if sec < 10
+                //sec - 1
+                sec = sec - 1;
+                //append 0 to new value
+                sec = '0'+sec;
+                //set sec
+                $('#sec').text(sec);
+            } else {//else
+                //sec - 1
+                sec = sec - 1;
+                //set sec
+                $('#sec').text(sec);
+            }
+        }, 1000);
+
+
+        // USER ANSWER Op and Submit
+        $('input[type="radio"]').click(function(){
+            var curQuesId = $('.active').attr('id'); //get id of element that s current bearing the class active
+            var questionNum = curQuesId.substr(1); //get question number by getting the last character of the curQuesId....using substr
+            var indexOfArray = questionNum - 1; // gets d ans index method[]
+            console.log(indexOfArray);
+
+            var userAns = $(this).val(); 
+            questionBank[indexOfArray].userAns = userAns; //user selected ans
+            // console.log(userAns);
+
+            // var correctAns = questionBank[indexOfArray].ans;  //correct Ans
+            // console.log(correctAns);
+        });
+
+        function submitQuestion(quesLen){
+            var i;
+            var score = 0;
+            for(i = 0; i < quesLen; i++){
+                if(questionBank[i].userAns == questionBank[i].ans){
+                    score = score + 1;
+                }
+            }
+            stopButton();
+            return (score / quesLen) * 100;
+        }
+
+        $('#submit').click(function(){
+            var totalScore = submitQuestion(quesLen);
+            $('#questions').html('You Scored: '+totalScore+'%');
+            $('#control').append('<button id="restart">Restart</button>');
+            alert('You Scored: '+totalScore+'%');
+            $('#restart').click(function (e) {
+                e.preventDefault();
+                // console.log('here');
+                location.reload();
+
+            });
+            $(this).prop('disabled', true); //disable submit button
+            clearInterval(timeCountDown); //start time count down
+        });
+
+        function stopButton(){
+            $('#prev').prop('disabled', true);//disabled prev button
+            $('#next').prop('disabled', true);//disabled next button
+        }
+
+       
+
+
+
+        // //prev
+        // document.getElementsByTagName('button')[0].onclick = function (params) {
+        //     alert('Coming Soon!!, still on development mode');
+        // }
+
+        // //next
+        // document.getElementsByTagName('button')[2].onclick = function (params) {
+        //     alert('Coming Soon!!, still on development mode');
+        // }
+
+        // //submit
+        // function checkAnswer() {
+        //     var userAns = document.getElementById('question1').elements['ques1'].value;
+        //     if (userAns == 'A') { //correct ans
+        //         document.getElementById('question1').style.backgroundColor = 'green';
+        //     } else if (userAns == 'B') { //wrong ans
+        //         document.getElementById('question1').style.backgroundColor = 'red';
+        //     } else if (userAns == 'C') { //wrong ans
+        //         document.getElementById('question1').style.backgroundColor = 'red';
+        //     } else if (userAns == 'D') { //wrong ans
+        //         document.getElementById('question1').style.backgroundColor = 'red';
+        //     } else {
+        //         alert('Please pick an option before submission');
+        //     }
+
+        // }
+
+        // document.getElementById('btn').onclick = function(){
+        //     var userAns = document.getElementById('question1').elements['ques1'].value;
+        //     if(userAns == 'A'){//correct ans
+        //         document.getElementById('que').style.backgroundColor = 'green';
+        //     } else if(userAns == 'B') {//wrong ans
+        //         document.getElementById('que').style.backgroundColor = 'red';
+        //     } else {
+        //         alert('Please pick an option before submission')
+        //     }
+        // }
+    </script>
+</body>
+
+</html>
